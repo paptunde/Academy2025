@@ -1,5 +1,8 @@
 ﻿using Academy2025.Data;
-using Academy2025.Respositories;
+using Academy2025.Repositories;
+using Academy2025.Dtos;
+using Microsoft.AspNetCore.Authentication;
+using Academy2025.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,130 +13,59 @@ namespace Academy2025.Controllers
     [ApiController]
     public class CourseController : ControllerBase
     {
-        private readonly CourseRepository _repository;
+        private readonly ICourseService _courseService;
 
-        public CourseController()
+        public CourseController(ICourseService courseService)
         {
-            _repository = new CourseRepository();
+            _courseService = courseService;
         }
 
         // GET: api/<CoursesController>
         [HttpGet]
-        public IEnumerable<Course> Get()
+        public async Task<IEnumerable<CourseDto>> GetAsync()
         {
-            return _repository.GetAll();
+            return await _courseService.GetAllAsync();
         }
 
         // GET api/<CoursesController>/5
         [HttpGet("{id}")]
-        public ActionResult<Course> Get(int id)
+        public async Task<ActionResult<CourseDto>> GetAsync(int id)
         {
-            var Course = _repository.GetById(id);
+            var Course = await _courseService.GetByIdAsync(id);
 
             return Course == null ? NotFound() : Course;
         }
 
         // POST api/<CoursesController>
         [HttpPost]
-        public ActionResult Post([FromBody] Course data)
+        public async Task<ActionResult> PostAsync([FromBody] CourseDto data)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _repository.Create(data);
+            await _courseService.CreateAsync(data);
 
             return NoContent();
         }
 
         // PUT api/<CoursesController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Course data)
+        public async Task<ActionResult> PutAsync(int id, [FromBody] CourseDto data)
         {
-            var Course = _repository.Update(id, data);
+            var Course = await _courseService.UpdateAsync(id, data);
 
             return Course == null ? NotFound() : NoContent();
         }
 
         // DELETE api/<CoursesController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            var result = _repository.Delete(id);
+            var result = await _courseService.DeleteAsync(id);
 
             return result ? NoContent() : NotFound();
         }
-
-
-        /*
-        /// <summary>
-        /// 
-        /// </summary>
-        public static List<Course>? Courses = new List<Course>();
-
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<Course> Get()
-        {
-            return Courses;
-        }
-
-        // GET api/<UsersController>/5
-        [HttpGet("{id}")]
-        public ActionResult<Course> Get(int id)
-        {
-            foreach (var user in Courses) {
-                if (user.Id == id){
-                    return Ok(user);
-                }
-            }
-            return NotFound();
-        }
-
-        // POST api/<UsersController>
-        [HttpPost]
-        public ActionResult Post([FromBody] Course data)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-			Courses.Add(data);
-            return NoContent();
-        }
-
-		// PUT api/<CourseController>/5
-		[HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Course data)
-        {
-			foreach (var user in Courses)
-			{
-				if (user.Id == id)
-				{
-					user.Name = data.Name;
-                    user.desctiption = data.desctiption;
-
-                    return NoContent();
-				}
-			}
-            return NotFound();
-		}
-
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
-        {
-			foreach (var user in Courses)
-			{
-				if (user.Id == id)
-				{
-					Courses.Remove(user);
-                    return NoContent();
-				}
-			}
-			return NotFound();
-		}*/
     }
 }

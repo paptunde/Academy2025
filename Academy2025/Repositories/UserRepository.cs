@@ -1,76 +1,52 @@
 ﻿using Academy2025.Data;
-using System.Net.Cache;
-using System.Security.Cryptography.X509Certificates;
+using Academy2025.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Academy2025.Respositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public UserRepository()
+        public UserRepository(ApplicationDbContext context)
         {
-            _context = new ApplicationDbContext();
+            _context = context;
         }
 
-        public List<User> GetAll()
+        public Task<List<User>> GetAllAsync()
         {
-            return _context.Users.ToList();
+            return _context.Users.ToListAsync();
         }
 
-        public User? GetById(int id)
+        public Task<User?> GetByIdAsync(int id)
         {
-            return _context.Users.FirstOrDefault(user => user.Id == id);
+            return _context.Users.FirstOrDefaultAsync(user => user.Id == id);
         }
 
-        public void Create(User data)
+        public async Task CreateAsync(User data)
         {
-            _context.Users.Add(data);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(data);
+            await _context.SaveChangesAsync();
         }
 
-        public User? Update(int id, User data)
+        public Task<int> UpdateAsync()
+            => _context.SaveChangesAsync();
+
+        public async Task<bool> DeleteAsync(int id)
         {
-            var user = _context.Users.FirstOrDefault(user => user.Id == id);
-            if (user != null)
-            {
-                user.FirstName = data.FirstName;
-                user.LastName = data.LastName;
-                user.Birth = data.Birth;
-                _context.SaveChanges();
-
-                return user;
-            }
-
-            return null;
-        }
-
-        public void Age(User data)
-        {
-            var d = DateTime.Now.AddYears(-18);
-
-            IEnumerable<User> B = from u in _context.Users
-                                    where u.Birth < d
-                                    select data;
-           
-            foreach (var s in B)
-            {
-                Console.WriteLine(s);
-            }
-        }
-
-        public bool Delete(int id)
-        {
-            var user = _context.Users.FirstOrDefault(user => user.Id == id);
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
             if (user != null)
             {
                 _context.Users.Remove(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
 
             return false;
         }
+
+        public Task<User?> GetByEmailAsync(string email)
+            => _context.Users.FirstOrDefaultAsync(user => user.Email == email);
     }
 }

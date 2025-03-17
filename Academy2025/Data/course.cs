@@ -4,15 +4,14 @@ namespace Academy2025.Data
 {
     public class Course
     {
+        [Key]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
         public string? Name { get; set; }
 
-		[Required]
-		[StringLength(50)]
-		public string? desctiption { get; set; }
+        public ICollection<User> Users { get; set; } = [];
+
+        public string? Author { get; set; }
 
     }
 }

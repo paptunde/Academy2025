@@ -1,56 +1,44 @@
-﻿using Academy2025.Data;
-using System.Net.Cache;
-using System.Security.Cryptography.X509Certificates;
+﻿using Academy2025.Repositories;
+using Academy2025.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Academy2025.Respositories
 {
-    public class CourseRepository
+    public class CourseRepository : ICourseRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public CourseRepository()
+        public CourseRepository(ApplicationDbContext context)
         {
-            _context = new ApplicationDbContext();
+            _context = context;
         }
 
-        public List<Course> GetAll()
+        public Task<List<Course>> GetAllAsync()
         {
-            return _context.Courses.ToList();
+            return _context.Courses.ToListAsync();
         }
 
-        public Course? GetById(int id)
+        public Task<Course?> GetByIdAsync(int id)
         {
-            return _context.Courses.FirstOrDefault(Course => Course.Id == id);
+            return _context.Courses.FirstOrDefaultAsync(Course => Course.Id == id);
         }
 
-        public void Create(Course data)
+        public async Task CreateAsync(Course data)
         {
-            _context.Courses.Add(data);
-            _context.SaveChanges();
+            await _context.Courses.AddAsync(data);
+            await _context.SaveChangesAsync();
         }
 
-        public Course? Update(int id, Course data)
+        public Task<int> UpdateAsync()
+        => _context.SaveChangesAsync();
+
+        public async Task<bool> DeleteAsync(int id)
         {
-            var Course = _context.Courses.FirstOrDefault(Course => Course.Id == id);
-            if (Course != null)
-            {
-                Course.Name = data.Name;
-                Course.desctiption = data.desctiption;
-                _context.SaveChanges();
-
-                return Course;
-            }
-
-            return null;
-        }
-
-        public bool Delete(int id)
-        {
-            var Course = _context.Courses.FirstOrDefault(Course => Course.Id == id);
+            var Course = await _context.Courses.FirstOrDefaultAsync(Course => Course.Id == id);
             if (Course != null)
             {
                 _context.Courses.Remove(Course);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 return true;
             }
