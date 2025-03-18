@@ -6,5 +6,7 @@ namespace Academy2025.Services
     public interface IAccountService
     {
         Task<User?> LoginAsync(LoginDto loginDto);
+        Task<User?> Login2Async(LoginDto loginDto);
+
     }
 }

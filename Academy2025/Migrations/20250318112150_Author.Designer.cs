@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Academy2025.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250311072555_TaskCreater")]
-    partial class TaskCreater
+    [Migration("20250318112150_Author")]
+    partial class Author
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,9 @@ namespace Academy2025.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Author")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -44,9 +47,20 @@ namespace Academy2025.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

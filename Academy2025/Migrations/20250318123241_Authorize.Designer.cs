@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Academy2025.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250317133347_AuthorRoleName")]
-    partial class AuthorRoleName
+    [Migration("20250318123241_Authorize")]
+    partial class Authorize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,8 +26,8 @@ namespace Academy2025.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Author")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("Author")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");

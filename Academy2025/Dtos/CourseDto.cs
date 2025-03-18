@@ -15,6 +15,6 @@ namespace Academy2025.Dtos
         public ICollection<User> Users { get; set; } = [];
 
         [Required]
-        public string? Author { get; set; }
+        public int? Author { get; set; }
     }
 }

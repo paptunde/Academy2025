@@ -1,7 +1,9 @@
 ﻿using Academy2025.Data;
 using Academy2025.Options;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using SQLitePCL;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -16,13 +18,14 @@ namespace Academy2025.Services
         {
             _jwtOptions = options.Value;
         }
-
+        
         public string CreateToken(User user)
         {
             var claims = new List<Claim>
             {
                 new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.Role, user.Role ?? string.Empty)
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));

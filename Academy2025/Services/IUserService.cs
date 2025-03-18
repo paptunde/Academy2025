@@ -1,4 +1,5 @@
 ﻿using Academy2025.Dtos;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Academy2025.Services
 {
@@ -9,6 +10,8 @@ namespace Academy2025.Services
         Task<List<UserDto>> GetAllAsync();
         Task<UserDto?> GetByIdAsync(int id);
         Task<UserDto?> UpdateAsync(int id, UserDto data);
+        //JwtSecurityToken GetAccessToken();
+        //string GetUserId();
     }
 
 }

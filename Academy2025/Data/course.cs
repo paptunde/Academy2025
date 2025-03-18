@@ -11,7 +11,7 @@ namespace Academy2025.Data
 
         public ICollection<User> Users { get; set; } = [];
 
-        public string? Author { get; set; }
+        public int? Author { get; set; }
 
     }
 }

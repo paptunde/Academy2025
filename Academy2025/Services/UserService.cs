@@ -1,6 +1,9 @@
 ﻿using Academy2025.Data;
 using Academy2025.Dtos;
 using Academy2025.Repositories;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Academy2025.Services
 {
@@ -51,7 +54,9 @@ namespace Academy2025.Services
             Id = user.Id,
             Name = user.Name,
             Email = user.Email,
-            Password = user.Password
+            Password = user.Password,
+            HashedPassword = user.HashedPassword,
+            Role = user.Role
         };
 
         private static User MapToModel(UserDto userDto) => new()
@@ -59,7 +64,32 @@ namespace Academy2025.Services
             Id = userDto.Id,
             Name = userDto.Name,
             Email = userDto.Email,
-            Password = userDto.Password
+            Password = userDto.Password,
+            HashedPassword = userDto.HashedPassword, 
+            Role = userDto.Role
         };
+        /*
+        public JwtSecurityToken GetAccessToken(User user)
+        {
+            if (AccessToken is null)
+            {
+                var token = _context.HttpContext?.Request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value
+                .ToString()
+                .Replace("bearer", string.Empty, StringComparison.OrdinalIgnoreCase)
+                .Trim();
+
+                var jwtHandler = new JwtSecurityTokenHandler();
+                AccessToken = jwtHandler.ReadJwtToken(token);
+            }
+            return AccessToken;
+        }
+        public string GetUserId(User user)
+        {
+            if (userId is null)
+            {
+                userId = GetAccessToken().Claims.FirstOrDefault(x => x.Type == "JwtRegisteredClaimNames.Sub")?.Value;
+            }
+            return userId!;
+        }*/
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Security.Claims;
 using Academy2025.Services;
 
 namespace Academy2025
@@ -76,7 +77,12 @@ namespace Academy2025
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtOptions:Key"]!))
                 };
             });
-            builder.Services.AddAuthorization();
+
+            builder.Services.AddAuthorization( options =>
+            {
+                options.AddPolicy("AdminOnlyPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "admin"));
+            });
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -23,8 +23,8 @@ namespace Academy2025.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Author")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("Author")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
