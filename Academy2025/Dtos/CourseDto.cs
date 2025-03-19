@@ -12,7 +12,7 @@ namespace Academy2025.Dtos
         [Required]
         public string? Name { get; set; }
 
-        public ICollection<User> Users { get; set; } = [];
+        public ICollection<UserDto> Users { get; set; } = [];
 
         [Required]
         public int? Author { get; set; }

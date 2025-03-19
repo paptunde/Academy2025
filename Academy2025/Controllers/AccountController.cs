@@ -3,7 +3,7 @@ using Academy2025.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Academy_2025.Controllers
+namespace Academy2025.Controllers
 {
     [Route("api/[controller]")]
     [AllowAnonymous]
@@ -23,6 +23,17 @@ namespace Academy_2025.Controllers
         public async Task<ActionResult<string>> LoginAsync([FromBody] LoginDto loginDto)
         {
             var user = await _accountService.LoginAsync(loginDto);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return _tokenService.CreateToken(user);
+        }
+        [HttpPost("login2")]
+        public async Task<ActionResult<string>> Login2Async([FromBody] LoginDto loginDto)
+        {
+            var user = await _accountService.Login2Async(loginDto);
             if (user == null)
             {
                 return Unauthorized();

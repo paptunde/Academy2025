@@ -31,7 +31,7 @@ namespace Academy2025.Services
         public async Task<User?> Login2Async(LoginDto loginDto){
             var user = await _userRepository.GetByEmailAsync(loginDto.Email);
 
-            if (user != null && BCrypt.Net.BCrypt.Verify(user.HashedPassword, loginDto.Password))
+            if (user != null && BCrypt.Net.BCrypt.Verify(loginDto.Password, user.HashedPassword ))
             {
                 return user;
             }

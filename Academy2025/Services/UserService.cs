@@ -49,15 +49,16 @@ namespace Academy2025.Services
             return user != null ? MapToDto(user) : null;
         }
 
-        private static UserDto MapToDto(User user) => new()
+        private static UserDto MapToDto(User user)=> new()
         {
             Id = user.Id,
             Name = user.Name,
             Email = user.Email,
             Password = user.Password,
-            HashedPassword = user.HashedPassword,
-            Role = user.Role
+            Role = user.Role,
+            Birth = user.Birth,
         };
+        
 
         private static User MapToModel(UserDto userDto) => new()
         {
@@ -65,31 +66,24 @@ namespace Academy2025.Services
             Name = userDto.Name,
             Email = userDto.Email,
             Password = userDto.Password,
-            HashedPassword = userDto.HashedPassword, 
-            Role = userDto.Role
+            HashedPassword = BCrypt.Net.BCrypt.HashPassword(userDto.Password), 
+            Role = userDto.Role,
+            Birth = userDto.Birth
         };
-        /*
-        public JwtSecurityToken GetAccessToken(User user)
+        
+        public async Task<UserDto?> GetUserWithAccessTokenAsync(HttpContext context)
         {
-            if (AccessToken is null)
-            {
-                var token = _context.HttpContext?.Request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value
+            
+                var token = new JwtSecurityTokenHandler().ReadJwtToken(
+                    context.Request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value
                 .ToString()
                 .Replace("bearer", string.Empty, StringComparison.OrdinalIgnoreCase)
-                .Trim();
+                .Trim());
 
-                var jwtHandler = new JwtSecurityTokenHandler();
-                AccessToken = jwtHandler.ReadJwtToken(token);
-            }
-            return AccessToken;
+            var user = await GetByIdAsync(
+                Convert.ToInt32(token.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub)!.Value));
+            
+            return user;
         }
-        public string GetUserId(User user)
-        {
-            if (userId is null)
-            {
-                userId = GetAccessToken().Claims.FirstOrDefault(x => x.Type == "JwtRegisteredClaimNames.Sub")?.Value;
-            }
-            return userId!;
-        }*/
     }
 }

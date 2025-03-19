@@ -51,13 +51,20 @@ namespace Academy2025.Controllers
                 return BadRequest(ModelState);
             }
 
-            data.HashedPassword = BCrypt.Net.BCrypt.HashPassword(data.Password);
             await _userService.CreateAsync(data);
 
             return NoContent();
 
         }
 
+        //user api/<UsersController>/me
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDto>> GetMeAsync()
+        {
+            var user = await _userService.GetUserWithAccessTokenAsync(HttpContext);
+            return user == null ? NotFound() : user;
+        }
         // PUT api/<UsersController>/5
         [Authorize]
         [HttpPut("{id}")]

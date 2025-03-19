@@ -51,15 +51,13 @@ namespace Academy2025.Services
         {
             Id = Course.Id,
             Name = Course.Name,
-            Author = Course.Author,
-            Users = Course.Users
+            Author = Course.Author
         };
 
         private static Course MapToModel(CourseDto CourseDto) => new()
         {
             Id = CourseDto.Id,
             Name = CourseDto.Name,
-            Users = CourseDto.Users,
             Author = CourseDto.Author
         };
     }
