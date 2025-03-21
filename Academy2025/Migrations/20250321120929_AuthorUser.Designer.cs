@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Academy2025.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250319144328_UserAndCourseFix")]
-    partial class UserAndCourseFix
+    [Migration("20250321120929_AuthorUser")]
+    partial class AuthorUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,13 +26,15 @@ namespace Academy2025.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Author")
+                    b.Property<int?>("AuthorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Courses");
                 });
@@ -87,6 +89,15 @@ namespace Academy2025.Migrations
                     b.ToTable("CourseUser");
                 });
 
+            modelBuilder.Entity("Academy2025.Data.Course", b =>
+                {
+                    b.HasOne("Academy2025.Data.User", "Author")
+                        .WithMany("AuthoredCourses")
+                        .HasForeignKey("AuthorId");
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("CourseUser", b =>
                 {
                     b.HasOne("Academy2025.Data.Course", null)
@@ -100,6 +111,11 @@ namespace Academy2025.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Academy2025.Data.User", b =>
+                {
+                    b.Navigation("AuthoredCourses");
                 });
 #pragma warning restore 612, 618
         }

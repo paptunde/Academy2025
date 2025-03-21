@@ -9,6 +9,15 @@ namespace Academy2025.Data
                
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Author)
+                .WithMany(u => u.AuthoredCourses)
+                .HasForeignKey(c => c.AuthorId);
+        }
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
 

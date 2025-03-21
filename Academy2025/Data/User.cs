@@ -18,6 +18,7 @@ namespace Academy2025.Data
         public string? Role {  get; set; }
 
         public ICollection<Course> Courses { get; set; } = [];
+        public ICollection<Course> AuthoredCourses { get; set; } = [];
 
         public required string Email {  get; set; }
 
